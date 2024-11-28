@@ -1,0 +1,40 @@
+@echo off
+setlocal enabledelayedexpansion
+
+:: Create a directory to store output if it doesn't exist
+if not exist "%userprofile%\SoftwareInventory" mkdir "%userprofile%\SoftwareInventory"
+set OUTPUT_FILE="%userprofile%\SoftwareInventory\installed_software_%computername%_%date:~-4,4%%date:~-10,2%%date:~-7,2%.txt"
+
+echo Software Inventory Report for %computername% > %OUTPUT_FILE%
+echo Generated on %date% %time% >> %OUTPUT_FILE%
+echo. >> %OUTPUT_FILE%
+
+:: Method 1: Registry - 32-bit and 64-bit installed programs
+echo ========== Installed Software from Registry ========== >> %OUTPUT_FILE%
+echo. >> %OUTPUT_FILE%
+
+:: 32-bit applications on 64-bit Windows
+echo Checking 32-bit Applications: >> %OUTPUT_FILE%
+reg query "HKLM\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall" /s /f "DisplayName" 2^>nul | find "DisplayName" | findstr /v "^$" | sort | find /v "InstallSource" >> %OUTPUT_FILE%
+
+echo. >> %OUTPUT_FILE%
+echo Checking 64-bit Applications: >> %OUTPUT_FILE%
+reg query "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall" /s /f "DisplayName" 2^>nul | find "DisplayName" | findstr /v "^$" | sort | find /v "InstallSource" >> %OUTPUT_FILE%
+
+:: Method 2: WMI Query for additional software information
+echo. >> %OUTPUT_FILE%
+echo ========== Software Information via WMI ========== >> %OUTPUT_FILE%
+wmic product get name,version >> %OUTPUT_FILE%
+
+:: Method 3: PowerShell method for more comprehensive listing
+echo. >> %OUTPUT_FILE%
+echo ========== PowerShell Software Enumeration ========== >> %OUTPUT_FILE%
+powershell -Command "Get-WmiObject Win32_Product | Select-Object Name, Version | Format-Table -AutoSize" >> %OUTPUT_FILE%
+
+:: Method 4: Installed Updates
+echo. >> %OUTPUT_FILE%
+echo ========== Installed Windows Updates ========== >> %OUTPUT_FILE%
+wmic qfe list brief >> %OUTPUT_FILE%
+
+echo Software inventory completed. Check %OUTPUT_FILE% for details.
+pause
