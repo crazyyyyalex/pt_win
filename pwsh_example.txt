@@ -1,1 +1,4 @@
 c:\windows\Microsoft.NET\Framework\v4.0.30319\bin\csc.exe /t:exe /out:MyApplication.exe MyApplication.cs
+
+
+csc.exe /reference:"C:\Program Files (x86)\Reference Assemblies\Microsoft\WindowsPowerShell\3.0\System.Management.Automation.dll" powershell.cs /out:test.exe
