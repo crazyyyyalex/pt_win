@@ -1,0 +1,2 @@
+c:\windows\Microsoft.NET\Framework\<version>\bin\csc.exe 
+            /t:exe /out:MyApplication.exe MyApplication.cs
