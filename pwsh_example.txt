@@ -1,2 +1,1 @@
-c:\windows\Microsoft.NET\Framework\<version>\bin\csc.exe 
-            /t:exe /out:MyApplication.exe MyApplication.cs
+c:\windows\Microsoft.NET\Framework\v4.0.30319\bin\csc.exe /t:exe /out:MyApplication.exe MyApplication.cs
